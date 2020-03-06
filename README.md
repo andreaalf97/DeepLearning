@@ -2,7 +2,7 @@
 Reproduction project for Deep Learning
 
 * Andrea Alfieri - 5128315
-* Sharon Grundmann
+* Sharon Grundmann - 4973720
 * Aditya Kunar - 5074274
 * Avinash Saravanan - 4993381
 
