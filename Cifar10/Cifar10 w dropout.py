@@ -16,7 +16,7 @@ transform = transforms.Compose(
 )
 
 trainSet = torchvision.datasets.CIFAR10(
-    root='./data',
+    root='../data',
     train=True,
     download=True,
     transform=transform
@@ -139,6 +139,5 @@ for epoch in range(5):  # loop over the dataset multiple times
             running_loss = 0.0
 
 print('Finished Training')
-
 
 
