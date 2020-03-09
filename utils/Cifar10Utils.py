@@ -4,7 +4,7 @@ import torchvision
 import torchvision.transforms as transforms
 
 class Cifar10Util:
-    num_workers = 0
+    num_workers = 2
     batch_size = 4
 
     classes = (
