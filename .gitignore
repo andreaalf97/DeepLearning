@@ -1,2 +1,4 @@
 data/
 .idea/
+.spyproject/
+utils/__pycache__/
