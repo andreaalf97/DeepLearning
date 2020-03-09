@@ -19,7 +19,7 @@ transform = transforms.Compose(
 )
 
 trainSet = torchvision.datasets.CIFAR10(
-    root='../data',
+    root='./data',
     train=True,
     download=True,
     transform=transform

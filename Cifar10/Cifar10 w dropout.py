@@ -1,10 +1,10 @@
+
 import torch
 import torchvision
 import torchvision.transforms as transforms
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
-
 
 # Using ``torchvision``, it’s extremely easy to load CIFAR10.
 
@@ -16,7 +16,7 @@ transform = transforms.Compose(
 )
 
 trainSet = torchvision.datasets.CIFAR10(
-    root='../data',
+    root='./data',
     train=True,
     download=True,
     transform=transform
@@ -50,14 +50,13 @@ classes = (
 class Net(nn.Module):
 
     def __init__(self):
-
-        super(Net, self).__init__()
-
+        
         super(Net, self).__init__()
         
-        self.do1 = nn.Dropout(p=0.9)
-        self.do2 = nn.Dropout(p=0.75)
-        self.do3 = nn.Dropout(p=0.5)
+        self.do1 = nn.Dropout2d(p=0.1)
+        self.do2 = nn.Dropout2d(p=0.25)
+        self.do3 = nn.Dropout2d(p=0.5) 
+        self.do4 = nn.Dropout(p=0.5)
         
         self.conv1 = nn.Conv2d(3, 96, 5,padding=2)
 
@@ -72,32 +71,26 @@ class Net(nn.Module):
         self.pool = nn.MaxPool2d(3, 2)
 
     def forward(self, x):
-
         
-        x = self.pool(F.relu(self.do2(self.conv1(self.do1(x)))))
-
+        x = self.do1(x)
+        x = self.pool(F.relu(self.do2(self.conv1(x))))
         x = self.pool(F.relu(self.do2(self.conv2(x))))
-        
         x = self.pool(F.relu(self.do3(self.conv3(x))))
-
         x = x.view(-1, 2304)
-
-        x = F.relu(self.do3(self.fc1(x)))
-
-        x = F.relu(self.do3(self.fc2(x)))
-
+        x = self.do4(x)
+        x = F.relu(self.fc1(x))
+        x = self.do4(x)
+        x = F.relu(self.fc2(x))
         return x
 
-    
+
+
 use_gpu = torch.cuda.is_available()
 
 net = Net()
 
 if use_gpu:
     net = net.cuda()
-
-
-
 
 # Define a Loss function and optimizer
 # Let's use a Classification Cross-Entropy loss and SGD with momentum.
@@ -109,7 +102,7 @@ optimizer = optim.SGD(
     momentum=0.9
 )
 
-
+#optimizer =optim.Adam(net.parameters(), lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0, amsgrad=False)
 # TRAIN THE NETWORK
 
 # This is when things start to get interesting.
@@ -141,8 +134,11 @@ for epoch in range(5):  # loop over the dataset multiple times
         # print statistics
         running_loss += loss.item()
        
-        if i % 200 == 199:    # print every 20 mini-batches
+        if i % 200 == 199:    # print every 200 mini-batches
             print('[%d, %5d] loss: %.3f' %(epoch + 1, i + 1, running_loss / 200))
             running_loss = 0.0
 
 print('Finished Training')
+
+
+
