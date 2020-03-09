@@ -2,7 +2,7 @@ import torch
 import torchvision
 
 trainloader = torch.utils.data.DataLoader(
-  torchvision.datasets.MNIST(root='./data', train=True, download=True,
+  torchvision.datasets.MNIST(root='../data', train=True, download=True,
                              transform=torchvision.transforms.Compose([
                                torchvision.transforms.ToTensor(),
                                torchvision.transforms.Normalize(
@@ -93,6 +93,5 @@ for epoch in range(2):  # loop over the dataset multiple times
             running_loss = 0.0
             niter = epoch * len(trainloader) + i
 print('Finished Training')
-
 
 
