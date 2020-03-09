@@ -1,11 +1,8 @@
 import torch
 import torchvision
 import torchvision.transforms as transforms
-from utils.images import imshow
-
 import torch.nn as nn
 import torch.nn.functional as F
-
 import torch.optim as optim
 
 
@@ -19,7 +16,7 @@ transform = transforms.Compose(
 )
 
 trainSet = torchvision.datasets.CIFAR10(
-    root='./data',
+    root='../data',
     train=True,
     download=True,
     transform=transform
@@ -27,22 +24,8 @@ trainSet = torchvision.datasets.CIFAR10(
 
 trainLoader = torch.utils.data.DataLoader(
     trainSet,
-    batch_size=4,
+    batch_size=80,
     shuffle=True,
-    num_workers=2
-)
-
-testSet = torchvision.datasets.CIFAR10(
-    root='./data',
-    train=False,
-    download=True,
-    transform=transform
-)
-
-testLoader = torch.utils.data.DataLoader(
-    testSet,
-    batch_size=4,
-    shuffle=False,
     num_workers=2
 )
 
@@ -59,19 +42,6 @@ classes = (
     'truck'
 )
 
-# LET US SHOW SOME OF THE TRAINING IMAGES, FOR FUN
-
-# get some random training images
-dataIter = iter(trainLoader)
-images, labels = dataIter.next()
-
-# show images
-imshow(torchvision.utils.make_grid(images))
-
-# print labels
-print(' '.join('%5s' % classes[labels[j]] for j in range(4)))
-
-
 # DEFINING A CONVOLUTIONAL NEURAL NETWORK
 
 # Copy the neural network from the Neural Networks section before and modify it to
@@ -83,6 +53,12 @@ class Net(nn.Module):
 
         super(Net, self).__init__()
 
+        super(Net, self).__init__()
+        
+        self.do1 = nn.Dropout(p=0.9)
+        self.do2 = nn.Dropout(p=0.75)
+        self.do3 = nn.Dropout(p=0.5)
+        
         self.conv1 = nn.Conv2d(3, 96, 5,padding=2)
 
         self.conv2 = nn.Conv2d(96, 128, 5,padding=2)
@@ -97,25 +73,30 @@ class Net(nn.Module):
 
     def forward(self, x):
 
-        x = self.pool(F.relu(self.conv1(x)))
-
-        x = self.pool(F.relu(self.conv2(x)))
         
-        x = self.pool(F.relu(self.conv3(x)))
+        x = self.pool(F.relu(self.do2(self.conv1(self.do1(x)))))
+
+        x = self.pool(F.relu(self.do2(self.conv2(x))))
+        
+        x = self.pool(F.relu(self.do3(self.conv3(x))))
 
         x = x.view(-1, 2304)
 
-        x = F.relu(self.fc1(x))
+        x = F.relu(self.do3(self.fc1(x)))
 
-        x = F.relu(self.fc2(x))
+        x = F.relu(self.do3(self.fc2(x)))
 
         return x
 
+    
 use_gpu = torch.cuda.is_available()
+
 net = Net()
 
 if use_gpu:
     net = net.cuda()
+
+
 
 
 # Define a Loss function and optimizer
@@ -135,18 +116,18 @@ optimizer = optim.SGD(
 # We simply have to loop over our data iterator, and feed the inputs to the
 # network and optimize.
 
-for epoch in range(1):  # loop over the dataset multiple times
+for epoch in range(5):  # loop over the dataset multiple times
     running_loss = 0.0
 
     for i, data in enumerate(trainLoader, 0):
 
         # get the inputs; data is a list of [inputs, labels]
         inputs, labels = data
-
+        
         if use_gpu:
             inputs = inputs.cuda()
             labels = labels.cuda()
-
+        
         # zero the parameter gradients
         optimizer.zero_grad()
 
@@ -160,8 +141,8 @@ for epoch in range(1):  # loop over the dataset multiple times
         # print statistics
         running_loss += loss.item()
        
-        if i % 2000 == 1999:    # print every 2000 mini-batches
-            print('[%d, %5d] loss: %.3f' %(epoch + 1, i + 1, running_loss / 2000))
+        if i % 200 == 199:    # print every 20 mini-batches
+            print('[%d, %5d] loss: %.3f' %(epoch + 1, i + 1, running_loss / 200))
             running_loss = 0.0
 
 print('Finished Training')
