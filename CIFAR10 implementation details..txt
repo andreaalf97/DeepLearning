@@ -1,0 +1,22 @@
+CIFAR10
+
+
+50000 Training, 10000 test.
+
+5000 images used for validation.
+
+
+Preprocessing- Global contrast normalisation and then ZCA whitening. 
+
+for training-
+
+base_epsilon: 0.1 apply_l2_decay: true l2_decay: 0.001 i hoppe this is learning rate with weight decay for the hidden layers.
+
+DENSE_UNIFORM_SQRT_FAN_IN sigma: 1.0  for weight initialization. 
+
+name: "bias" initialization: CONSTANT
+
+base_epsilon: 0.001 epsilon_decay : INVERSE_T epsilon_decay_half_life : 100000 initial_momentum : 0.5 final_momentum : 0.95 momentum_change_steps : 10000 (possibly talks about how momentum changes and learning rate decays.)
+
+
+
