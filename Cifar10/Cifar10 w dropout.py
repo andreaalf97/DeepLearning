@@ -1,51 +1,16 @@
-
 import torch
-import torchvision
-import torchvision.transforms as transforms
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
+import utils.Cifar10Utils as utils
 
-# Using ``torchvision``, it’s extremely easy to load CIFAR10.
 
-# The output of torchvision datasets are PILImage images of range [0, 1].
-# We transform them to Tensors of normalized range [-1, 1].
-transform = transforms.Compose(
-    [transforms.ToTensor(),
-     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))]  # 0.5 is the mean and std
-)
-
-trainSet = torchvision.datasets.CIFAR10(
-    root='../data',
-    train=True,
-    download=True,
-    transform=transform
-)
-
-trainLoader = torch.utils.data.DataLoader(
-    trainSet,
-    batch_size=80,
-    shuffle=True,
-    num_workers=2
-)
-
-classes = (
-    'plane',
-    'car',
-    'bird',
-    'cat',
-    'deer',
-    'dog',
-    'frog',
-    'horse',
-    'ship',
-    'truck'
-)
 
 # DEFINING A CONVOLUTIONAL NEURAL NETWORK
 
 # Copy the neural network from the Neural Networks section before and modify it to
 # take 3-channel images (instead of 1-channel images as it was defined).
+util = utils.Cifar10Util
 
 class Net(nn.Module):
 
@@ -112,7 +77,7 @@ optimizer = optim.SGD(
 for epoch in range(5):  # loop over the dataset multiple times
     running_loss = 0.0
 
-    for i, data in enumerate(trainLoader, 0):
+    for i, data in enumerate(util.trainLoader, 0):
 
         # get the inputs; data is a list of [inputs, labels]
         inputs, labels = data
