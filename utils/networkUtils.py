@@ -19,7 +19,7 @@ class GaussianDropout(nn.Module):
     def forward(self, x):
 #         Sample noise   e ~ N(1, alpha)
         epsilon = Variable(torch.randn(x.size()) * self.alpha + 1)
-        if x.is_cuda():
-            epsilon = epsilon.cuda()
+#         if use_gpu:
+#             epsilon = epsilon.cuda()
         return x * epsilon
         
