@@ -1,0 +1,20 @@
+MNIST
+
+1) 60000 training and 10000 test samples.
+2) Validation on the training was done on 10000.
+3) 1 million weight updates means 20 epochs means batch size is 1 for 50000 samples to tune the hyperparameters.
+4) 1 million weight updates for the 60000 training samples. 
+5) Architecture and dropout as done in table 10.
+6) A final momentum of 0.95 from 0.5. change steps 20000. Weight constraints with c=3.5 for input layers and 5 for the rest of the layers.
+7) name: "weight" initialization: DENSE_GAUSSIAN_SQRT_FAN_IN sigma: 1.0 
+8) Bias initialization is constant.
+9) apply_weight_norm: true weight_norm: 5 for hidden layers. apply_l2_decay: true l2_decay: 0.001.
+10) base_epsilon: 0.1 epsilon_decay : EXPONENTIAL epsilon_decay_half_life : 100000 i hope this means learning rate.
+
+
+
+ 
+
+
+
+ 
