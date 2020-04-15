@@ -1,6 +1,8 @@
 # DeepLearning
 Reproduction project for Deep Learning
 
+Please find the blogpost [here](DeepLearningReport.ipynb)
+
 * Andrea Alfieri - 5128315
 * Sharon Grundmann - 4973720
 * Aditya Kunar - 5074274
